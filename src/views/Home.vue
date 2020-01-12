@@ -1,18 +1,50 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <div :class="$style.header">- Electron Python -</div>
+    <el-card :body-style="{ padding: '0px'}" style="margin: 0 20px; border-color: transparent;">
+      <div slot="header">
+        <span style="font-size: 18px;">Get Current Time | </span>This is an example to call RPC server API
+      </div>
+      <div style="padding: 20px;">
+        <div style="font-size: 20px; margin-bottom: 12px;">{{currentTime}}</div>
+        <div>
+          <el-button type="primary" @click="getCurrentTime">GET</el-button>
+        </div>
+      </div>
+    </el-card>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import { manageError } from '@/utils'
 
 export default {
-  name: 'home',
-  components: {
-    HelloWorld
+  data () {
+    let currentTime = 'Not Get Yet'
+    return {
+      currentTime
+    }
+  },
+  methods: {
+    getCurrentTime () {
+      this.rpcClient.request({
+        route: ':example:get-current-time'
+      }).then(result => {
+        this.currentTime = result
+      }).catch(err => {
+        manageError(this, err)
+      })
+    }
   }
 }
 </script>
+
+<style lang="scss" module>
+  .header {
+    font-family: $code-font-family;
+    font-size: 24px;
+    text-align: center;
+    padding: 24px;
+    color: $--color-text-primary;
+  }
+</style>

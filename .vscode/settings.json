@@ -1,0 +1,11 @@
+{
+  "path-autocomplete.pathMappings": {
+    "@": "${folder}/src"
+  },
+  "python.linting.pylintEnabled": true,
+  "python.envFile": "${workspaceFolder}/py-api/.env",
+  "python.venvPath": "${workspaceFolder}/py-api",
+  "python.autoComplete.extraPaths": [
+      "${workspaceFolder}/py-api"
+  ]
+}

@@ -9,6 +9,7 @@
     - [组件间的数据传递](#组件间的数据传递)
     - [CSS 相关](#CSS-相关)
     - [统一的标签顺序](#统一的标签顺序)
+    - <a target="_blank" href="https://cn.vuejs.org/v2/style-guide/">More: 参考官方风格指南</a>
   - [vue-router](#vue-router)
   - [vuex](#vuex)
   - [自定义 js 模块](#自定义-js-模块)
@@ -62,7 +63,7 @@
 
 - 模式:
 
-  你可以为 .env 文件增加后缀 [mode] 来设置某个模式下特有的环境变量。为特定模式准备的环境文件拥有比一般的环境文件更高的优先级。模式的名称与 `NODE_ENV` 环境变量是一致的。
+  你可以为 `.env` 文件增加后缀 `[mode]` 来设置某个模式下特有的环境变量。为特定模式准备的环境文件拥有比一般的环境文件更高的优先级。模式的名称与 `NODE_ENV` 环境变量是一致的。
 
 # 编码规范
 
@@ -70,7 +71,7 @@
 
 ### 组件名称
 
-  在 script 中，一律使用 PascalCase。在 template 中，一律使用 kebab-case。
+  在 `<script>` 中，一律使用 PascalCase。在 `<template>` 中，一律使用 kebab-case。
 
   组件的 name 属性不可省略，且应与 `.vue` 文件名一致。
 
@@ -281,15 +282,15 @@
 
 # 基本逻辑架构
 
-  使用 zerorpc 为消息层在 electron render process 和 python 之间进行通信。在程序开始运行时，electron main process 使用子进程来启动 python RPC server。python RPC server 会暴露一系列的 api。Electron renderer process 通过 rpc Client 访问这些 api。
+  使用 zerorpc 为消息层在 electron render process 和 python 之间进行通信。在程序开始运行时，electron main process 使用子进程来启动 python RPC server。python RPC server 会暴露一系列的 API。Electron renderer process 通过 rpc Client 访问这些 API。
 
-  原则：视图层和逻辑层分离。视图层 (electron renderer) 只应处理用户界面的逻辑，而实际的功能逻辑则通过调用 python api 来实现。
+  原则：视图层和逻辑层分离。视图层 (electron renderer) 只应处理用户界面的逻辑，而实际的功能逻辑则通过调用 python API 来实现。
 
   视图层使用 Vue 来进行渲染，关于该技术的细节请参考官方文档。
 
   ## RPC Server
 
-  python 层的作用是通过 RPC Server 暴露一系列的 api，你的其它代码都是为这些 api 服务的。api 的入口文件为 `/py-api/apis/main.py`。顶层 api 路由被放置在 `/py-api/apis/routes.py` 中，它的结构如下：
+  python 层的作用是通过 RPC Server 暴露一系列的 API，你的其它代码都是为这些 API 服务的。API 的入口文件为 `/py-api/apis/main.py`。顶层 API 路由被放置在 `/py-api/apis/routes.py` 中，它的结构如下：
 
   ``` python
   API_ROUTES = {
@@ -307,7 +308,7 @@
   }
   ```
 
-  这个 API 路由可以无限嵌套子路由。调用 api 时，实际上是调用 api route 所对应的 method。对于每一个路由节点，'method' 和 'children' 都可以省略。如果调用的 API route 在 API_ROUTES 中不存在，或者某个节点没有注册 method 或注册为 None，调用该 API 将会报错。
+  这个 API 路由可以无限嵌套子路由。调用 API 时，实际上是调用 API route 所对应的 method。对于每一个路由节点，'method' 和 'children' 都可以省略。如果调用的 API route 在 API_ROUTES 中不存在，或者某个节点没有注册 method 或注册为 None，调用该 API 将会报错。
 
   你可以参考示例代码，将 API 分别放在不同的 module 中。
 

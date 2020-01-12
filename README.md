@@ -1,4 +1,5 @@
 <!-- content -->
+- [综述](#综述)
 - [项目运行指南](#项目运行指南)
 - [环境变量和模式](#环境变量和模式)
 - [编码规范](#编码规范)
@@ -14,11 +15,21 @@
   - [alias](#alias)
   - [静态资源](#静态资源)
   - [工程目录结构](#工程目录结构)
+- [基本逻辑架构](#基本逻辑架构)
+  - [RPC Server](#RPC-Server)
+  - [API 调用规范](#API-调用规范)
+  - [RPC Client](#RPC-Client)
 - [常见问题](#常见问题)
   - [这个项目是为了解决什么问题?](#这个项目是为了解决什么问题?)
   - [这个项目的意义在哪里?](#这个项目的意义在哪里?)
   - [适用场景与优缺点](#适用场景与优缺点)
   - [为什么不用 C++/C#? 为什么不使用纯 js 实现?](#为什么不用-C++/C#?-为什么不使用纯-js-实现?)
+
+# 综述
+
+这个项目是一个**开箱即用**的最小示例/模板，使用 Web 技术作为 python 的 UI 层，来构建完整的桌面应用。
+
+进一步了解请参考: [基本逻辑架构](#基本逻辑架构) | [常见问题](#常见问题)
 
 # 项目运行指南
 
@@ -267,6 +278,85 @@
     |-- components -------------- 存放可复用的组件
     |-- views ------------------- 视图组件，文件结构与路由相对应
 ```
+
+# 基本逻辑架构
+
+  使用 zerorpc 为消息层在 electron render process 和 python 之间进行通信。在程序开始运行时，electron main process 使用子进程来启动 python RPC server。python RPC server 会暴露一系列的 api。Electron renderer process 通过 rpc Client 访问这些 api。
+
+  原则：视图层和逻辑层分离。视图层 (electron renderer) 只应处理用户界面的逻辑，而实际的功能逻辑则通过调用 python api 来实现。
+
+  视图层使用 Vue 来进行渲染，关于该技术的细节请参考官方文档。
+
+  ## RPC Server
+
+  python 层的作用是通过 RPC Server 暴露一系列的 api，你的其它代码都是为这些 api 服务的。api 的入口文件为 `/py-api/apis/main.py`。顶层 api 路由被放置在 `/py-api/apis/routes.py` 中，它的结构如下：
+
+  ``` python
+  API_ROUTES = {
+    'method': None,
+    'children': {
+      'example': {
+        'method': example,
+        'chindren': {
+          'child1': {
+            'method': child1
+          }
+        }
+      }
+    }
+  }
+  ```
+
+  这个 API 路由可以无限嵌套子路由。调用 api 时，实际上是调用 api route 所对应的 method。对于每一个路由节点，'method' 和 'children' 都可以省略。如果调用的 API route 在 API_ROUTES 中不存在，或者某个节点没有注册 method 或注册为 None，调用该 API 将会报错。
+
+  你可以参考示例代码，将 API 分别放在不同的 module 中。
+
+  ## API 调用规范
+  
+  - Route 命名规范：使用 `:` 分隔，`:` 代表顶层路由。注意，最前面的一个 `:` 不可省略。如: `:example`，`:example:child1` 分别对应上文中的 `example`，`child1` 节点。
+
+  - 调用规范：API 调用传递一个 mapping 对象作为参数:
+
+    ``` js
+    // options
+    {
+      route: ':example',
+      args: [arg1, arg2],
+      kwargs: {
+        kw1: val1,
+        kw2: val2
+      }
+    }
+    ```
+
+    除了 route 以外，其它参数都是可选的。`args` 和 `kwargs` 会分别作为位置参数和关键字参数传递给 API 对应的方法。
+
+  ## RPC Client
+
+  - 在 Vue 组件中可以直接通过 `vm.rpcClient.request()` 调用:
+
+    ``` js
+    // vm 为 Vue 实例
+    vm.rpcClient.request(options).then(res => {
+      // manage result
+    }).catch(err => {
+      // manage errors
+    })
+    ```
+  
+  - 在普通 js 文件中，可以手动引入 rpcClient:
+
+    ``` js
+    import {rpcClient} from '@/plugins/rpc-client'
+
+    rpcClient.request(options).then(res => {
+      // manage result
+    }).catch(err => {
+      // manage errors
+    })
+    ```
+
+  - options 参数为符合上述 API 调用规范的一个 mapping 对象。
 
 # 常见问题
 

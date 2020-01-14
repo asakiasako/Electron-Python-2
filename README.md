@@ -20,6 +20,10 @@
   - [RPC Server](#RPC-Server)
   - [API 调用规范](#API-调用规范)
   - [RPC Client](#RPC-Client)
+- [项目的开发环境](#项目的开发环境)
+  - [NodeJS](#NodeJS)
+  - [python](#python)
+- [项目配置项](#项目配置项)
 - [常见问题](#常见问题)
   - [这个项目是为了解决什么问题?](#这个项目是为了解决什么问题?)
   - [这个项目的意义在哪里?](#这个项目的意义在哪里?)
@@ -37,6 +41,8 @@
 - 项目安装：`yarn install`
 
   这个命令会对项目进行一些预配置，然后安装所有的 python 和 node.js 依赖。
+
+  在项目安装前，你可能需要更改一些项目配置，并安装项目的开发环境，或进行项目配置。
 
 - 运行：
   - 在 development 环境下运行项目：`yarn electron:serve`
@@ -183,8 +189,6 @@
 
 ### <a target="_blank" href="https://cn.vuejs.org/v2/style-guide/">More: 参考官方风格指南</a>
 
----
-
 ## vue-router
 
 - URL 命名规范：path 对应视图变化 (使用 kebab-case 命名法)，query 对应数据变化，hash 对应滚动条位置
@@ -204,8 +208,6 @@
 
 - 当组件依赖 \$route 时 (特别是 \$route.params)，使用<a target="_blank" href="https://router.vuejs.org/zh/guide/essentials/passing-props.html">路由组件传参</a>，与 \$route 解耦
 
----
-
 ## vuex
 
 - 需要由 vuex 管理的数据
@@ -216,8 +218,6 @@
 - getter、mutation、action、module 的命名使用 camelCase
 - module 应避免嵌套，尽量扁平化
 - module 应启用命名空间：`namespaced: true`
-
----
 
 ## 自定义 js 模块
 
@@ -235,8 +235,6 @@
   export function myMethod4(options) {} // 当所有参数都是可选时
   ```
 
----
-
 ## alias
 
   在 `js` 和 `.vue` 文件中，可以使用 `@` 作为路径的别名，该别名等同于 `/src/`。
@@ -244,13 +242,13 @@
   ``` js
   import Home from '@/views/Home.vue'
   ```
----
+
 ## 静态资源
 
 放置在 public 目录下的资源会直接被拷贝，而不会经过 webpack 的处理。
 
 在 main 进程和 renderer 进程中，你都可以通过 `__static` 这个全局变量来指向 public 文件夹，不论是 develope 环境还是 procuction 环境下。
----
+
 ## 工程目录结构
 
 ```
@@ -358,6 +356,70 @@
     ```
 
   - options 参数为符合上述 API 调用规范的一个 mapping 对象。
+
+# 项目的开发环境
+
+## NodeJS
+
+- 安装 Node.js
+- 安装 Yarn：我们使用 [Yarn](https://www.yarnpkg.com/lang/en/) 作为 node 的包管理器
+- 配置 node-gyp 的运行环境
+  
+  node-gyp 用于编译一些原生的 node 模块。请参考 [官方文档](https://github.com/nodejs/node-gyp#on-windows) 进行配置。
+  
+  注意：安装 Visual Studio Build Tools 时，除了默认勾选的安装项，还要勾选 Build Tools for V140，否则在编译原生模块时，会提示缺少此内容。
+
+## python
+
+- 安装 python 3.7.4 或更高版本，并添加 path 环境变量，使之成为默认版本。
+- 安装 pipenv：我们使用 pipenv 作为 python 的包管理器。
+    
+  ```
+  pip install pipenv
+  ```
+
+- 安装 python 2.7，它被 node-gyp 用来编译 NodeJS 原生模块，与你的代码使用的 python 版本没有关系。
+
+# 项目配置项
+
+- `/.npmrc`
+  
+  该文件为 npm 相关的配置文件，在使用 yarn install 命令或安装 NodeJS 模块时，将会从该文件中读取配置。
+
+  ```
+  <!-- npm -->
+  registry ------------ npm 仓库地址
+  electron_mirror ----- 用于下载 electron 所需的一些文件
+  python -------------- python 2.7 可执行文件的路径，用于 node-gyp 对原生项目进行编译。注意，它与你项目中所用到的 python 版本无关，且只能使用 python 2.7。python 3 是不被 node-gyp 支持的。
+  msvs_version -------- 用于编译 node_gyp 的 Visual Studio 版本。
+
+  <!-- electron 相关 -->
+  target -------------- electron 的版本号
+  arch ---------------- electron 的架构(ia32 或 x64)
+  target_arch --------- electron 的架构(ia32 或 x64)
+  disturl ------------- electron 官方提供，请勿修改。
+  runtime=electron
+  build_from_source=true
+
+  <!-- node-gyp -->
+  node_gyp ------------ node-gyp 的地址。你不用修改此项，在 install 的时候，会自动在你的项目内安装 node-gyp，并修改此配置为指向该 node-gyp 包的绝对地址。
+  ```
+
+- `/vue.config.js`
+  
+  项目的配置文件。请参考：https://cli.vuejs.org/config/#global-cli-config
+
+  请注意：在修改某项配置前，确保你知道它。
+
+- `/py-api/pipfile`
+
+  ```
+  [[source]]
+  url: pypi 库的地址
+
+  [requires]
+  python_version: 你想使用的 python 版本号，可指定 1 位、2 位或者 3 位。如需指定 arch，在后面加上 `-32` 或 `-64`。否则它将使用你默认的版本架构。
+  ```
 
 # 常见问题
 

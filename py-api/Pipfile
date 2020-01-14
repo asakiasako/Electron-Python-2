@@ -1,5 +1,5 @@
 [[source]]
-url = "https://mirrors.aliyun.com/pypi/simple"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 verify_ssl = true
 
 [scripts]
@@ -13,4 +13,4 @@ pylint = "*"
 zerorpc = "*"
 
 [requires]
-python_version = "3.8"
+python_version = "3.8-32"

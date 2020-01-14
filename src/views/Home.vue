@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :class="$style.header">- Electron Python -</div>
+    <div :class="$style.header">Electron Python</div>
     <el-card :body-style="{ padding: '0px'}" style="margin: 0 20px; border-color: transparent;">
       <div slot="header">
         <span style="font-size: 18px;">Get Current Time | </span>This is an example to call RPC server API
@@ -12,6 +12,11 @@
         </div>
       </div>
     </el-card>
+    <div :class="$style.brands">
+      <i class="fas fa-atom"></i>
+      <i class="fab fa-vuejs"></i>
+      <i class="fab fa-python"></i>
+    </div>
   </div>
 </template>
 
@@ -41,10 +46,20 @@ export default {
 
 <style lang="scss" module>
   .header {
-    font-family: $code-font-family;
-    font-size: 24px;
+    font-size: 36px;
     text-align: center;
     padding: 24px;
-    color: $--color-text-primary;
+    color: $--color-primary;
+  }
+  .brands {
+    display: flex;
+    justify-content: space-between;
+    width: 400px;
+    padding: 40px;
+    margin: auto;
+    color: $--color-primary-light-9;
+  }
+  .brands i {
+    font-size: 80px;
   }
 </style>

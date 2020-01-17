@@ -1,0 +1,120 @@
+/* Base  */
+$color-white: #FFFFFF;
+$color-black: #000000;
+$color-primary: rgb(66, 153, 244);
+
+$color-sea-blue: rgba(5, 102, 141, 1);
+$color-metallic-seaweed: rgba(2, 128, 144, 1);
+$color-persian-green: rgba(0, 168, 150, 1);
+$color-caribbean-green: rgba(2, 195, 154, 1);
+$color-pale-spring-bud: rgba(240, 243, 189, 1);
+
+
+/* $color-sea-blue shadows */
+$color-sea-blue-light-1: mix($color-white, $color-sea-blue, 10%) !default;
+$color-sea-blue-light-2: mix($color-white, $color-sea-blue, 20%) !default;
+$color-sea-blue-light-3: mix($color-white, $color-sea-blue, 30%) !default;
+$color-sea-blue-light-4: mix($color-white, $color-sea-blue, 40%) !default;
+$color-sea-blue-light-5: mix($color-white, $color-sea-blue, 50%) !default;
+$color-sea-blue-light-6: mix($color-white, $color-sea-blue, 60%) !default;
+$color-sea-blue-light-7: mix($color-white, $color-sea-blue, 70%) !default;
+$color-sea-blue-light-8: mix($color-white, $color-sea-blue, 80%) !default;
+$color-sea-blue-light-9: mix($color-white, $color-sea-blue, 90%) !default;
+
+$color-sea-blue-dark-1: mix($color-black, $color-sea-blue, 10%) !default;
+$color-sea-blue-dark-2: mix($color-black, $color-sea-blue, 20%) !default;
+$color-sea-blue-dark-3: mix($color-black, $color-sea-blue, 30%) !default;
+$color-sea-blue-dark-4: mix($color-black, $color-sea-blue, 40%) !default;
+$color-sea-blue-dark-5: mix($color-black, $color-sea-blue, 50%) !default;
+$color-sea-blue-dark-6: mix($color-black, $color-sea-blue, 60%) !default;
+$color-sea-blue-dark-7: mix($color-black, $color-sea-blue, 70%) !default;
+$color-sea-blue-dark-8: mix($color-black, $color-sea-blue, 80%) !default;
+$color-sea-blue-dark-9: mix($color-black, $color-sea-blue, 90%) !default;
+
+
+/* $color-metallic-seaweed shadows */
+$color-metallic-seaweed-light-1: mix($color-black, $color-metallic-seaweed, 10%) !default;
+$color-metallic-seaweed-light-2: mix($color-black, $color-metallic-seaweed, 20%) !default;
+$color-metallic-seaweed-light-3: mix($color-black, $color-metallic-seaweed, 30%) !default;
+$color-metallic-seaweed-light-4: mix($color-black, $color-metallic-seaweed, 40%) !default;
+$color-metallic-seaweed-light-5: mix($color-black, $color-metallic-seaweed, 50%) !default;
+$color-metallic-seaweed-light-6: mix($color-black, $color-metallic-seaweed, 60%) !default;
+$color-metallic-seaweed-light-7: mix($color-black, $color-metallic-seaweed, 70%) !default;
+$color-metallic-seaweed-light-8: mix($color-black, $color-metallic-seaweed, 80%) !default;
+$color-metallic-seaweed-light-9: mix($color-black, $color-metallic-seaweed, 90%) !default;
+
+$color-metallic-seaweed-dark-1: mix($color-black, $color-metallic-seaweed, 10%) !default;
+$color-metallic-seaweed-dark-2: mix($color-black, $color-metallic-seaweed, 20%) !default;
+$color-metallic-seaweed-dark-3: mix($color-black, $color-metallic-seaweed, 30%) !default;
+$color-metallic-seaweed-dark-4: mix($color-black, $color-metallic-seaweed, 40%) !default;
+$color-metallic-seaweed-dark-5: mix($color-black, $color-metallic-seaweed, 50%) !default;
+$color-metallic-seaweed-dark-6: mix($color-black, $color-metallic-seaweed, 60%) !default;
+$color-metallic-seaweed-dark-7: mix($color-black, $color-metallic-seaweed, 70%) !default;
+$color-metallic-seaweed-dark-8: mix($color-black, $color-metallic-seaweed, 80%) !default;
+$color-metallic-seaweed-dark-9: mix($color-black, $color-metallic-seaweed, 90%) !default;
+
+
+/* $color-persian-green shadows */
+$color-persian-green-light-1: mix($color-white, $color-persian-green, 10%) !default;
+$color-persian-green-light-2: mix($color-white, $color-persian-green, 20%) !default;
+$color-persian-green-light-3: mix($color-white, $color-persian-green, 30%) !default;
+$color-persian-green-light-4: mix($color-white, $color-persian-green, 40%) !default;
+$color-persian-green-light-5: mix($color-white, $color-persian-green, 50%) !default;
+$color-persian-green-light-6: mix($color-white, $color-persian-green, 60%) !default;
+$color-persian-green-light-7: mix($color-white, $color-persian-green, 70%) !default;
+$color-persian-green-light-8: mix($color-white, $color-persian-green, 80%) !default;
+$color-persian-green-light-9: mix($color-white, $color-persian-green, 90%) !default;
+
+$color-persian-green-dark-1: mix($color-black, $color-persian-green, 10%) !default;
+$color-persian-green-dark-2: mix($color-black, $color-persian-green, 20%) !default;
+$color-persian-green-dark-3: mix($color-black, $color-persian-green, 30%) !default;
+$color-persian-green-dark-4: mix($color-black, $color-persian-green, 40%) !default;
+$color-persian-green-dark-5: mix($color-black, $color-persian-green, 50%) !default;
+$color-persian-green-dark-6: mix($color-black, $color-persian-green, 60%) !default;
+$color-persian-green-dark-7: mix($color-black, $color-persian-green, 70%) !default;
+$color-persian-green-dark-8: mix($color-black, $color-persian-green, 80%) !default;
+$color-persian-green-dark-9: mix($color-black, $color-persian-green, 90%) !default;
+
+
+/* $color-caribbean-green shadows */
+$color-caribbean-green-light-1: mix($color-white, $color-caribbean-green, 10%) !default;
+$color-caribbean-green-light-2: mix($color-white, $color-caribbean-green, 20%) !default;
+$color-caribbean-green-light-3: mix($color-white, $color-caribbean-green, 30%) !default;
+$color-caribbean-green-light-4: mix($color-white, $color-caribbean-green, 40%) !default;
+$color-caribbean-green-light-5: mix($color-white, $color-caribbean-green, 50%) !default;
+$color-caribbean-green-light-6: mix($color-white, $color-caribbean-green, 60%) !default;
+$color-caribbean-green-light-7: mix($color-white, $color-caribbean-green, 70%) !default;
+$color-caribbean-green-light-8: mix($color-white, $color-caribbean-green, 80%) !default;
+$color-caribbean-green-light-9: mix($color-white, $color-caribbean-green, 90%) !default;
+
+$color-caribbean-green-dark-1: mix($color-black, $color-caribbean-green, 10%) !default;
+$color-caribbean-green-dark-2: mix($color-black, $color-caribbean-green, 20%) !default;
+$color-caribbean-green-dark-3: mix($color-black, $color-caribbean-green, 30%) !default;
+$color-caribbean-green-dark-4: mix($color-black, $color-caribbean-green, 40%) !default;
+$color-caribbean-green-dark-5: mix($color-black, $color-caribbean-green, 50%) !default;
+$color-caribbean-green-dark-6: mix($color-black, $color-caribbean-green, 60%) !default;
+$color-caribbean-green-dark-7: mix($color-black, $color-caribbean-green, 70%) !default;
+$color-caribbean-green-dark-8: mix($color-black, $color-caribbean-green, 80%) !default;
+$color-caribbean-green-dark-9: mix($color-black, $color-caribbean-green, 90%) !default;
+
+
+/* $color-pale-spring-bud shadows */
+$color-pale-spring-bud-light-1: mix($color-white, $color-pale-spring-bud, 10%) !default;
+$color-pale-spring-bud-light-2: mix($color-white, $color-pale-spring-bud, 20%) !default;
+$color-pale-spring-bud-light-3: mix($color-white, $color-pale-spring-bud, 30%) !default;
+$color-pale-spring-bud-light-4: mix($color-white, $color-pale-spring-bud, 40%) !default;
+$color-pale-spring-bud-light-5: mix($color-white, $color-pale-spring-bud, 50%) !default;
+$color-pale-spring-bud-light-6: mix($color-white, $color-pale-spring-bud, 60%) !default;
+$color-pale-spring-bud-light-7: mix($color-white, $color-pale-spring-bud, 70%) !default;
+$color-pale-spring-bud-light-8: mix($color-white, $color-pale-spring-bud, 80%) !default;
+$color-pale-spring-bud-light-9: mix($color-white, $color-pale-spring-bud, 90%) !default;
+
+$color-pale-spring-bud-dark-1: mix($color-black, $color-pale-spring-bud, 10%) !default;
+$color-pale-spring-bud-dark-2: mix($color-black, $color-pale-spring-bud, 20%) !default;
+$color-pale-spring-bud-dark-3: mix($color-black, $color-pale-spring-bud, 30%) !default;
+$color-pale-spring-bud-dark-4: mix($color-black, $color-pale-spring-bud, 40%) !default;
+$color-pale-spring-bud-dark-5: mix($color-black, $color-pale-spring-bud, 50%) !default;
+$color-pale-spring-bud-dark-6: mix($color-black, $color-pale-spring-bud, 60%) !default;
+$color-pale-spring-bud-dark-7: mix($color-black, $color-pale-spring-bud, 70%) !default;
+$color-pale-spring-bud-dark-8: mix($color-black, $color-pale-spring-bud, 80%) !default;
+$color-pale-spring-bud-dark-9: mix($color-black, $color-pale-spring-bud, 90%) !default;

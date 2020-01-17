@@ -7,6 +7,7 @@
     - [组件名称](#组件名称)
     - [组件存放位置](#组件存放位置)
     - [组件间的数据传递](#组件间的数据传递)
+    -[使用插件为应用增加特性](#使用插件为应用增加特性)
     - [CSS 相关](#CSS-相关)
     - [统一的标签顺序](#统一的标签顺序)
     - <a target="_blank" href="https://cn.vuejs.org/v2/style-guide/">More: 参考官方风格指南</a>
@@ -110,9 +111,34 @@
   - 父组件 -> 子组件：使用 propsC
   - 子组件 -> 父组件：自定义事件
   - 父组件 <-> 子组件： v-model 或 .sync
-  - 非父子组件：使用 vm.bus 或 vuex
+  - 非父子组件：使用 vm.$bus 或 vuex
   - 紧密耦合的祖孙间传递也可以考虑用父组件作为中间运输层
   - 紧密耦合的兄弟间传递也可以考虑用父组件作为中转运输层
+
+### 使用插件为应用增加特性
+
+使用插件为应用增加全局特性，使得这些特性能方便的在多个不同应用中使用，且富有弹性：能够方便的增加、移除某些特性，而不用担心对其它部分造成影响。
+
+自己编写的插件存放在 `/src/plugins` 文件夹的子目录中。`/src/plugins/index.js` 负责所有插件的加载，包括你安装在 `node-modules` 中的插件和 `plugins` 文件夹中你自己编写的插件。
+
+关于插件的内容请参考：[Creating Custom Vue.js Plugins](https://alligator.io/vuejs/creating-custom-plugins/)
+
+### 使用 `element-ui`
+
+已通过全局引用，引入了 `element-ui`，可以直接在 `.vue` 组件中使用。
+
+### 使用 `vm.$bus` 进行通信
+
+`vm.$bus` 是通过 `/src/plugins/event-bus` 插件挂载到每个 `Vue` 实例上的属性。非父子组件可以以之作为桥梁进行通信。
+
+``` js
+vmA.$bus.$emit('event-name')
+vmB.$bus.$on('event-name', () => {...})
+```
+
+### 使用 `vm.$electron`
+
+`vm.$electron` 是通过 `vue-electron` 插件引入的属性，它指向 `electron` 包。这样你就不用在每个 `Vue` 组件里都引入这个包了。
 
 ### CSS 相关
 

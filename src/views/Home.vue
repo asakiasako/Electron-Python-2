@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     getCurrentTime () {
-      this.rpcClient.request({
+      this.$rpcClient.request({
         route: ':example:get-current-time'
       }).then(result => {
         this.currentTime = result

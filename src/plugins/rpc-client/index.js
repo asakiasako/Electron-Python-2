@@ -1,3 +1,4 @@
+/* add rpcClient to Vue.prototype.$rpcClient */
 import zeroRPC from 'zerorpc'
 import { remote } from 'electron'
 
@@ -8,7 +9,7 @@ const clientIP = '127.0.0.1'
 const clientPort = getRpcPort()
 
 /* run RPC client */
-export const rpcClient = new zeroRPC.Client()
+const rpcClient = new zeroRPC.Client()
 
 rpcClient.connectServer = function (address) {
   let client = this
@@ -42,3 +43,11 @@ rpcClient.checkConnection = function () {
 }
 
 rpcClient.connectServer(clientIP)
+
+const PluginRpcClient = {
+  install (Vue, options) {
+    Vue.prototype.$rpcClient = rpcClient
+  }
+}
+
+export default PluginRpcClient

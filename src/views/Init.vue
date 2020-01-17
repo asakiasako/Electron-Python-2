@@ -11,7 +11,7 @@ export default {
   async created () {
     while (true) {
       try {
-        let connected = await this.rpcClient.checkConnection()
+        let connected = await this.$rpcClient.checkConnection()
         if (connected) {
           this.$router.push({
             name: 'home'

@@ -1,10 +1,10 @@
 'use strict'
 import { app, protocol, BrowserWindow, globalShortcut } from 'electron'
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
-import { createRpcServer, exitRpcServer, getRpcPort } from '@/bg/rpc-server'
+import '@/bg/app-path' // change app paths before other imports
+import { createRpcServer, exitRpcServer, getRpcPort, isServerProcessAlive } from '@/bg/rpc-server'
 import { acceleratorMap } from '@/bg/accelerator'
 import '@/bg/menu'
-import '@/bg/app-path'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -29,6 +29,7 @@ if (!gotTheLock) {
 
 // Register global variable
 global.getRpcPort = getRpcPort
+global.isServerProcessAlive = isServerProcessAlive
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: { secure: true, standard: true } }])

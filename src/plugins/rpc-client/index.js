@@ -3,10 +3,17 @@ import zeroRPC from 'zerorpc'
 import { remote } from 'electron'
 
 const getRpcPort = remote.getGlobal('getRpcPort')
+const isServerProcessAlive = remote.getGlobal('isServerProcessAlive')
 
 /* get current port from main process */
 const clientIP = '127.0.0.1'
 const clientPort = getRpcPort()
+const serverAlive = isServerProcessAlive()
+
+if (!serverAlive) {
+  remote.dialog.showErrorBox('Fatal Error', `Unable to launch RPC server process. Get more information with logs in:\n${remote.app.getPath('logs')}`)
+  remote.app.quit()
+}
 
 /* run RPC client */
 const rpcClient = new zeroRPC.Client()

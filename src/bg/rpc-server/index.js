@@ -49,9 +49,6 @@ const createRpcServer = () => {
         rpcServer = null
       })
     }
-  }).catch(err => {
-    // TODO: error management
-    console.log(err)
   })
 }
 

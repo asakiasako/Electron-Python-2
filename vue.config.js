@@ -15,7 +15,7 @@ module.exports = {
   pluginOptions: {
     electronBuilder: {
       builderOptions: {
-        appId: 'com.example.app',
+        appId: 'com.electron-python.app',
         win: {
           icon: 'build/icons/icon.ico'
         },

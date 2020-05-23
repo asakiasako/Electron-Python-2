@@ -1,6 +1,6 @@
 {
-  "name": "electron-python-2",
-  "productName": "Electron Python 2",
+  "name": "electron-python",
+  "productName": "Electron Python",
   "version": "0.1.0",
   "private": true,
   "scripts": {

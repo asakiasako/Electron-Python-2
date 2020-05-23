@@ -8,5 +8,5 @@
   "python.autoComplete.extraPaths": [
       "${workspaceFolder}/py-api"
   ],
-  "python.pythonPath": "py-api\\.venv\\Scripts\\python.exe"
+  "python.pythonPath": "py-code\\.venv\\Scripts\\python.exe"
 }

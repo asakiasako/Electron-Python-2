@@ -5,9 +5,9 @@
   "private": true,
   "scripts": {
     "lint": "vue-cli-service lint",
-    "electron:build": "chcp 65001 && cd py-api && pipenv run build && cd .. && vue-cli-service electron:build",
+    "electron:build": "chcp 65001 && cd py-code && poetry run build && cd .. && vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
-    "preinstall": "node .scripts/pre-install.js && cd py-api && pipenv install --dev && cd ..",
+    "preinstall": "node .scripts/pre-install.js && cd py-code && poetry install && cd ..",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
   },

@@ -24,4 +24,4 @@ yarn-error.log*
 /dist_electron
 
 # python api build files
-/public/api
+/public/ElectronPythonSubProcess

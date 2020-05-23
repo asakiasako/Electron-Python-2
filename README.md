@@ -1,38 +1,19 @@
 <!-- content -->
 - [综述](#综述)
+- [项目的开发环境](#项目的开发环境)
+  - [NodeJS](#NodeJS)
+  - [python](#python)
 - [项目运行指南](#项目运行指南)
 - [环境变量和模式](#环境变量和模式)
-- [编码规范](#编码规范)
-  - [Vue 单文件组件](#Vue-单文件组件)
-    - [组件名称](#组件名称)
-    - [组件存放位置](#组件存放位置)
-    - [组件间的数据传递](#组件间的数据传递)
-    - [使用插件为应用增加特性](#使用插件为应用增加特性)
-    - [使用 `element-ui`](#使用-element-ui)
-    - [使用 `vm.$bus` 进行通信](#使用-vm.$bus-进行通信)
-    - [使用 `vm.$electron`](#使用-vm.$electron`)
-    - [CSS 相关](#CSS-相关)
-    - [统一的标签顺序](#统一的标签顺序)
-    - <a target="_blank" href="https://cn.vuejs.org/v2/style-guide/">More: 参考官方风格指南</a>
-  - [vue-router](#vue-router)
-  - [vuex](#vuex)
-  - [自定义 js 模块](#自定义-js-模块)
-  - [alias](#alias)
-  - [静态资源](#静态资源)
-  - [工程目录结构](#工程目录结构)
+- [项目配置项](#项目配置项)
 - [基本逻辑架构](#基本逻辑架构)
   - [RPC Server](#RPC-Server)
   - [API 调用规范](#API-调用规范)
   - [RPC Client](#RPC-Client)
-- [项目的开发环境](#项目的开发环境)
-  - [NodeJS](#NodeJS)
-  - [python](#python)
-- [项目配置项](#项目配置项)
 - [常见问题](#常见问题)
-  - [这个项目是为了解决什么问题?](#这个项目是为了解决什么问题?)
-  - [这个项目的意义在哪里?](#这个项目的意义在哪里?)
+  - [这个项目的意义在哪里? 为什么不适用 C++ 或纯 javascript 实现？](#这个项目的意义在哪里? 为什么不适用 C++ 或纯 javascript 实现？)
   - [适用场景与优缺点](#适用场景与优缺点)
-  - [为什么不用 C++/C#? 为什么不使用纯 js 实现?](#为什么不用-C++/C#?-为什么不使用纯-js-实现?)
+  - [在 yarn install 时可能出现的常见错误](#在 yarn install 时可能出现的常见错误)
 
 # 综述
 
@@ -50,7 +31,7 @@
 
 在使用这个项目之前，你需要为项目提供必要的开发环境。
 
-## NodeJS 相关
+## NodeJS
 
 - 安装 Node.js
 - 安装 Yarn：我们使用 [Yarn](https://www.yarnpkg.com/lang/en/) 作为 node 的包管理器，以代替默认的 npm。
@@ -87,7 +68,7 @@
 
   这个命令会对项目进行一些预配置，然后安装所有的 python 和 node.js 依赖。
 
-  如果在 `yarn install` 时出现错误，可以参考：[在 `yarn install` 时可能出现的常见错误]
+  如果在 `yarn install` 时出现错误，可以参考：[在 yarn install 时可能出现的常见错误](#在 yarn install 时可能出现的常见错误)
 
 - 在 develope 环境下运行：`yarn electron:serve`
 
@@ -264,7 +245,7 @@
 
   相反，这种实现并不适用于面向普通用户的消费级的应用。消费级的应用应该更关注运行效率。
 
-## 在 `yarn install` 时可能出现的常见错误
+## 在 yarn install 时可能出现的常见错误
 
 - Downloading libzmq for windows 时超时
 

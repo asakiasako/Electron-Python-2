@@ -1,3 +1,21 @@
+- [编码规范](#编码规范)
+  - [Vue 单文件组件](#Vue-单文件组件)
+    - [组件名称](#组件名称)
+    - [组件存放位置](#组件存放位置)
+    - [组件间的数据传递](#组件间的数据传递)
+    - [使用插件为应用增加特性](#使用插件为应用增加特性)
+    - [使用 `element-ui`](#使用-element-ui)
+    - [使用 `vm.$bus` 进行通信](#使用-vm.$bus-进行通信)
+    - [使用 `vm.$electron`](#使用-vm.$electron`)
+    - [CSS 相关](#CSS-相关)
+    - [统一的标签顺序](#统一的标签顺序)
+    - <a target="_blank" href="https://cn.vuejs.org/v2/style-guide/">More: 参考官方风格指南</a>
+  - [vue-router](#vue-router)
+  - [vuex](#vuex)
+  - [自定义 js 模块](#自定义-js-模块)
+  - [alias](#alias)
+  - [静态资源](#静态资源)
+  - [工程目录结构](#工程目录结构)
 
 # 编码规范
 

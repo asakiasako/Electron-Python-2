@@ -49,7 +49,7 @@ export default {
     font-size: 36px;
     text-align: center;
     padding: 24px;
-    color: $--color-primary;
+    color: $color-primary;
   }
   .brands {
     display: flex;
@@ -57,7 +57,7 @@ export default {
     width: 400px;
     padding: 40px;
     margin: auto;
-    color: $--color-primary-light-9;
+    color: $color-primary-light-9;
   }
   .brands i {
     font-size: 80px;

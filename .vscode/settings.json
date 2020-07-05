@@ -6,7 +6,7 @@
   "python.envFile": "${workspaceFolder}/py-api/.env",
   "python.venvPath": "${workspaceFolder}/py-api",
   "python.autoComplete.extraPaths": [
-      "${workspaceFolder}/py-api"
+    "${workspaceFolder}/py-code/src"
   ],
   "python.pythonPath": "py-code\\.venv\\Scripts\\python.exe"
 }

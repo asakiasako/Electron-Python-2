@@ -18,10 +18,10 @@ if (!serverAlive) {
 /* run RPC client */
 const rpcClient = new zeroRPC.Client()
 
-rpcClient.connectServer = function (address) {
+rpcClient.connectServer = function () {
   let client = this
-  console.log(`tcp://${address}:${clientPort}`)
-  client.connect(`tcp://${address}:${clientPort}`)
+  console.log(`tcp://${clientIP}:${clientPort}`)
+  client.connect(`tcp://${clientIP}:${clientPort}`)
 }
 
 rpcClient.disconnectServer = function (address) {
@@ -49,7 +49,7 @@ rpcClient.checkConnection = function () {
   return rpcClient.invokes('check_connection')
 }
 
-rpcClient.connectServer(clientIP)
+rpcClient.connectServer()
 
 const PluginRpcClient = {
   install (Vue, options) {

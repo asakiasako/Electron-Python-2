@@ -13,9 +13,9 @@
       </div>
     </el-card>
     <div :class="$style.brands">
-      <i class="fas fa-atom"></i>
-      <i class="fab fa-vuejs"></i>
-      <i class="fab fa-python"></i>
+      <i class="el-icon-fas fa-atom"></i>
+      <i class="el-icon-fab fa-vuejs"></i>
+      <i class="el-icon-fab fa-python"></i>
     </div>
   </div>
 </template>

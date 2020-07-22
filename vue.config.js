@@ -14,6 +14,8 @@ module.exports = {
   },
   pluginOptions: {
     electronBuilder: {
+      externals: ['zerorpc'],
+      nodeModulesPath: ['./node_modules'],
       builderOptions: {
         appId: 'com.electron-python.app',
         win: {

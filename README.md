@@ -1,20 +1,3 @@
-<!-- content -->
-- [综述](#综述)
-- [项目的开发环境](#项目的开发环境)
-  - [NodeJS](#NodeJS)
-  - [python](#python)
-- [项目运行指南](#项目运行指南)
-- [环境变量和模式](#环境变量和模式)
-- [项目配置项](#项目配置项)
-- [基本逻辑架构](#基本逻辑架构)
-  - [RPC Server](#RPC-Server)
-  - [API 调用规范](#API-调用规范)
-  - [RPC Client](#RPC-Client)
-- [常见问题](#常见问题)
-  - [这个项目的意义在哪里? 为什么不适用 C++ 或纯 javascript 实现？](#这个项目的意义在哪里? 为什么不适用 C++ 或纯 javascript 实现？)
-  - [适用场景与优缺点](#适用场景与优缺点)
-  - [在 yarn install 时可能出现的常见错误](#在 yarn install 时可能出现的常见错误)
-
 # 综述
 
 这个项目是一个**开箱即用**的最小示例/模板，使用 Web 技术作为 python 的 UI 层，来构建完整的桌面应用。
@@ -58,11 +41,44 @@
 
   不建议使用 pip 安装 poetry，详情请参考：https://python-poetry.org/docs/#installation
 
+# 项目配置项
+
+- `/.npmrc`
+  
+  该文件为 npm 的配置文件，在使用 yarn install 命令或安装 NodeJS 模块时，将会从该文件中读取配置。
+
+  ```
+  <!-- npm -->
+  registry ------------ npm 仓库地址
+  electron_mirror ----- electron 相关文件
+  python -------------- python 2.7 可执行文件的路径，用于 node-gyp 对原生项目进行编译。注意，它与你项目中所用到的 python 版本无关，且只能使用 python 2.7。详情请参考 node-gyp 的文档。
+  msvs_version -------- 用于编译 node_gyp 的 Visual Studio 版本。默认为 2017。请根据实际情况进行选择。
+
+  <!-- electron 相关 -->
+  target -------------- electron 的版本号
+  arch ---------------- electron 的架构(ia32 或 x64)
+  target_arch --------- electron 的架构(ia32 或 x64)
+  disturl ------------- electron 官方提供，请勿修改。
+  runtime=electron
+  build_from_source=true
+
+  <!-- node-gyp -->
+  node_gyp ------------ node-gyp 的地址。你不用修改此项，在 install 的时候，会自动在你的项目内安装 node-gyp，并修改此配置为指向该 node-gyp 包的绝对地址。这样做是为了避免 node-gyp 部分版本所存在的 bug。
+  ```
+
+- `/vue.config.js`
+  
+  项目的配置文件。请参考：https://cli.vuejs.org/config/#global-cli-config
+
+- `/py-code`
+
+  配置文件在根目录下，请参考 Poetry 官方文档。
+
+  __scripts.py 是 pyproject.toml 中的 scripts 来源。
+
 # 项目运行指南
 
-当你安装好上述安装环境后，只需要使用预先设置好的命令，就可以完成整个项目 —— 包括 Node.js 和 python 部分 —— 的初始化及编译。
-
-如果你的环境是 Windows7/10 和 ia32 架构（包括 node 和 python），你应该可以直接进行初始化。否则请参考[项目配置项](#项目配置项)
+当你安装好上述安装环境后，只需要使用预先设置好的命令，就可以完成整个项目 —— 包括 Node.js 和 python 两部分 —— 的初始化及编译。
 
 - 项目安装：`yarn install`
 
@@ -98,54 +114,61 @@
 
   你可以为 `.env` 文件增加后缀 `[mode]` 来设置某个模式下特有的环境变量。为特定模式准备的环境文件拥有比一般的环境文件更高的优先级。模式的名称与 `NODE_ENV` 环境变量是一致的。
 
-# 项目配置项
+# RPC 通信
 
-- `/.npmrc`
-  
-  该文件为 npm 相关的配置文件，在使用 yarn install 命令或安装 NodeJS 模块时，将会从该文件中读取配置。
+  RPC 通信是这个项目最核心的部分，它是连接 python 和 Node.js 的桥梁。
 
+  在这个项目中，python 作为 RPC Server，用于业务逻辑的实现。Electron 是整个应用的外部框架。在应用启动时，Electron Main Process 会以子程序的方式启动 python RPC Server。Electron Renderer Process 负责 UI 界面的渲染，通过其实现的 RPC Client 向 RPC Server 发送请求并获取反馈。
+
+  整个项目应遵循视图层与业务逻辑层分离的原则，即 Node.js 部分只负责 UI 界面的渲染和逻辑——例如对数据格式的处理转换等。具体的业务逻辑应由 RPC Server 来实现。
+
+  在 Electron Renderer Process 中，我们使用 Vue.js 来构建 UI，同时引入 element-ui 作为 UI 组件库。与 UI 相关的内容将在后面阐述，这一节将主要讨论与 RPC 通信相关的问题。
+
+  关于 Electron、Vue、Element-UI 等技术栈的描述，请参阅其官方文档，本文将不作赘述。
+
+  RPC 通信主要由 3 部分组成——RPC 接口规范，如何在 RPC Server 中定义接口，以及如何通过 RPC Client 调用接口。
+
+  ## RPC 接口规范
+
+  RPC 接口由 3 部分组成：Route，args，kwargs。
+
+  Route 为接口的路由，用于指向接口对应的目标函数。它是一个由冒号 ":" 分隔的字符串。":" 为顶层路由 (root)。每一层路由可以有无限多的子路由。例如：
+
+  ``` python
+  ':instr:list'   # root -> instr -> list
+  ':trx:dac:get'  # root -> trx -> dac -> get
   ```
-  <!-- npm -->
-  registry ------------ npm 仓库地址
-  electron_mirror ----- 用于下载 electron 所需的一些文件
-  python -------------- python 2.7 可执行文件的路径，用于 node-gyp 对原生项目进行编译。注意，它与你项目中所用到的 python 版本无关，且只能使用 python 2.7。python 3 是不被 node-gyp 支持的。
-  msvs_version -------- 用于编译 node_gyp 的 Visual Studio 版本。
 
-  <!-- electron 相关 -->
-  target -------------- electron 的版本号
-  arch ---------------- electron 的架构(ia32 或 x64)
-  target_arch --------- electron 的架构(ia32 或 x64)
-  disturl ------------- electron 官方提供，请勿修改。
-  runtime=electron
-  build_from_source=true
+  注意：Route 最前面的 ":" 不可省略。
 
-  <!-- node-gyp -->
-  node_gyp ------------ node-gyp 的地址。你不用修改此项，在 install 的时候，会自动在你的项目内安装 node-gyp，并修改此配置为指向该 node-gyp 包的绝对地址。
+  args 中的元素将作为位置参数依次传递给目标函数。在 Javascript 环境中，它的表现形式为一个数组 (array)。
+
+  kwargs 中的元素将作为关键字参数传递给目标函数。在 Javascript 环境中，它的表现形式为一个简单对象 (object)。
+
+  args 和 kwargs 都是可选的。
+
+  注意，只有可以序列化的基本类型或者它们组成的容器类型才可以作为参数进行传递。你无法传递诸如一个函数对象之类的复杂对象作为参数。
+
+  完整的接口参数可以由一个 mapping 对象来描述：
+
+  ``` javascript
+  options = {
+    route: ':trx:dac:get',
+    args: [dacKey]
+  }
   ```
 
-- `/vue.config.js`
-  
-  项目的配置文件。请参考：https://cli.vuejs.org/config/#global-cli-config
+  ## 在 RPC Server 中定义接口
 
-  请注意：在修改某项配置前，确保你知道它。
+  python 部分的目的就是为了暴露一系列的 RPC 接口，它是整个 python code 的终端，所有其它代码都是为这些接口而服务的。
 
-- `/py-code`
+  RPC 接口的顶层结构是一个 mapping 对象：`/py-code/src/apis/routes.py` 中的 API_ROUTES。
 
-  配置文件在根目录下，请参考 Poetry 官方文档。
+  API_ROUTES 本身代表根路由节点，它有 2 个可选的键：'method' 和 'children'。method 的值为一个函数，通过根路由 ':' 即可指向这个函数。
 
-  __scripts.py 是 pyproject.toml 中的 scripts 来源。
+  children 的值则为该路由的子路由，其键为子路由节点的名称。每个子路由节点都是和根路由相似的一个对象，它也有 'method' 和 'children' 两个可选键。通过冒号将从根路由到子路由的各个节点名称连接起来，即可形成访问该子路由的完整路径。
 
-# 基本逻辑架构
-
-  使用 zerorpc 为消息层在 electron render process 和 python 之间进行通信。在程序开始运行时，electron main process 使用子进程来启动 python RPC server。python RPC server 会暴露一系列的 API。Electron renderer process 通过 rpc Client 访问这些 API。
-
-  原则：视图层和逻辑层分离。视图层 (electron renderer) 只应处理用户界面的逻辑，而实际的功能逻辑则通过调用 python API 来实现。
-
-  视图层使用 Vue 来进行渲染，关于该技术的细节请参考官方文档。
-
-  ## RPC Server
-
-  python 层的作用是通过 RPC Server 暴露一系列的 API，你的其它代码都是为这些 API 服务的。API 的入口文件为 `/py-code/src/apis/main.py`。顶层 API 路由被放置在 `/py-code/src/apis/routes.py` 中，它的结构如下：
+  例如我们有如下的根路由对象：
 
   ``` python
   API_ROUTES = {
@@ -163,56 +186,102 @@
   }
   ```
 
-  这个 API 路由可以无限嵌套子路由。调用 API 时，实际上是调用 API route 所对应的 method。对于每一个路由节点，'method' 和 'children' 都可以省略。如果调用的 API route 在 API_ROUTES 中不存在，或者某个节点没有注册 method 或注册为 None，调用该 API 将会报错。
+  则我们可以通过路由 `:example` 指向到 `example` 函数，通过路由 `:example:child1` 指向 `child` 函数。
 
-  你可以参考示例代码，将 API 分别放在不同的 module 中。
+  如果访问的路由节点不存在，或者在该路由节点上没有通过 'method' 注册函数，在调用时会抛出 `APIRouteError`。
 
-  ## API 调用规范
+  为了结构的清晰，我们可以将不同的节点分别放在不同的文件当中。在本示例代码中，根路由的子节点被分别放在了 module 文件夹的不同文件之中。
   
-  - Route 命名规范：使用 `:` 分隔，`:` 代表顶层路由。注意，最前面的一个 `:` 不可省略。如: `:example`，`:example:child1` 分别对应上文中的 `example`，`child1` 节点。
+  ## 在 RPC Client 中调用接口
 
-  - 调用规范：API 调用传递一个 mapping 对象作为参数:
+  在 Electron Renderer Process 中可以通过 rpcClient 对象来调用 RPC 接口。
 
-    ``` js
-    // options
-    {
-      route: ':example',
-      args: [arg1, arg2],
-      kwargs: {
-        kw1: val1,
-        kw2: val2
-      }
-    }
+  * rpcClient 被绑定在 Vue 组件中，因此在 Vue 组件中，可以直接通过 `vm.$rpcClient` 获取 rpcClient 对象。
+
+  * 在普通的 js 文件中，可以通过如下方式引入 rpcClient 对象：
+
+    ```
+    import rpcClient from '@/plugins/rpc-client/client'
     ```
 
-    除了 route 以外，其它参数都是可选的。`args` 和 `kwargs` 会分别作为位置参数和关键字参数传递给 API 对应的方法。
-
-  ## RPC Client
-
-  - 在 Vue 组件中可以直接通过 `vm.rpcClient.request()` 调用:
-
-    ``` js
-    // vm 为 Vue 实例
-    vm.rpcClient.request(options).then(res => {
-      // manage result
-    }).catch(err => {
-      // manage errors
-    })
-    ```
+  我们可以通过 rpcClient.request 来调用 RPC 接口，返回一个 Promise 对象：
   
-  - 在普通 js 文件中，可以手动引入 rpcClient:
+  ``` javascript
+  let options = {
+    route: ':abc:xyz',
+    args: [arg1, arg2],
+    kwargs: { kwarg1: value1, kwarg2: value2 }
+  }
+  rpcClient.request(options).then(res => {
+    // manage result
+  }).catch(err => {
+    // manage error
+  })
+  ```
 
-    ``` js
-    import {rpcClient} from '@/plugins/rpc-client'
+  其中，args 和 kwargs 会分别作为位置参数和关键字参数传递给目标函数，这二者都是可选的。
 
-    rpcClient.request(options).then(res => {
-      // manage result
-    }).catch(err => {
-      // manage errors
-    })
+# Electron Renderer Process 中的预设资源
+
+  基于应用的基本要素，在 Renderer Process 中有一些预设资源可以直接使用，便于快速构建应用。
+
+## Alias
+
+  在 js 和 .vue 文件中，可以使用 @ 作为路径的别名，该别名等同于 /src/。
+
+## Vue Plugins
+
+  项目预设了一些 Vue Plugin，用于实现一些常见的功能。我们用 `vm` 来表示一个 Vue 实例：
+
+  * alert-error
+
+    使用 `vm.$alertError (err, callback)` 来弹出一个对话框，用于提示信息。如果指定了 callback，将在对话框弹出后执行。
+
+  * event-bus
+
+    event-bus 是一个事件总线，用于在任意两个 Vue 组件间传递信息。它本身是一个 Vue 组件。
+
+    ``` javascript
+    vmA.$bus.$emit('event-name')
+    vmB.$bus.$on('event-name', () => {...})
     ```
 
-  - options 参数为符合上述 API 调用规范的一个 mapping 对象。
+  * lodash
+
+    通过 `vm.$lodash` 来调用 lodash 库
+
+  * rpc-client
+
+    通过 `vm.$rpcClient` 来调用 rpcClient 对象。请参考：RPC 通信
+
+  * vue-electron
+
+    通过 `vm.$electron` 即可调用 electron 库。等价于 `require('electron')`
+
+## element-ui
+
+  项目集成了 element-ui，可以直接使用其功能。
+
+## font-awesome
+
+  集成了 font-awesome 5 的免费图标库。通过在图标分类的类名前加上 el-icon 前缀，即可以与 element-ui 的内置 icon 一样的方式使用。
+
+  我们可以在[官网图标库](https://fontawesome.com/icons?d=gallery&m=free)中查询图标。例如，对于官网图标中的类：class="fas fa-cog"，可以按照如下方式调用：
+
+  ``` html
+  <i class="el-icon-fas fa-cog"></i>
+  ```
+
+## global-variables
+
+  '@/styles/global-variables.scss' 中的变量，可以在任何 .vue 组件中直接使用，而无需额外导入。你可以将需要全局使用的变量导入到该文件中。例如，_colors.scss 中的变量已经导入该文件，因而可以在任何 .vue 组件中直接使用。
+
+# 其它
+
+  关于其它内容，可以根据项目的结构自己扒一扒，在此不做赘述。
+
+  关于编码规范，请参考：CodingStyle.md
+
 
 # 常见问题
 
